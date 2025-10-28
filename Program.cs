@@ -14,6 +14,7 @@ builder.Services.AddScoped<ITenantRepository, TenantRepository>();
 builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<ICashRegisterRepository, CashRegisterRepository>();
 builder.Services.AddScoped<ICashRegisterService, CashRegisterService>();
+builder.Services.AddScoped<Persistencia>();
 
 builder.Services.AddDbContext<CursoInfoesteContext>(options =>
     options.UseMySql(
