@@ -5,18 +5,16 @@ namespace CursoInfoeste;
 public class TenantMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly Persistencia _persistencia;
     
-    public TenantMiddleware(RequestDelegate next, Persistencia persistencia)
+    public TenantMiddleware(RequestDelegate next)
     {
         _next = next;
-        _persistencia = persistencia;
     }
 
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, Persistencia persistencia)
     {
         var tenantId = context.Request.Headers["TenantId"].ToString();
-        _persistencia.TenantId = int.Parse(tenantId);
+        if (!string.IsNullOrEmpty(tenantId)) persistencia.TenantId = int.Parse(tenantId);
         
         Console.WriteLine("Antes de próximo middleware");
         

@@ -1,3 +1,4 @@
+using CursoInfoeste;
 using CursoInfoeste.Abstractions.Repositories;
 using CursoInfoeste.Abstractions.Services;
 using CursoInfoeste.Banco;
@@ -34,6 +35,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+app.UseSimpleMiddleware();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
