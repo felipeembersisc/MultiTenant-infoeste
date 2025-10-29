@@ -1,3 +1,4 @@
+using System.Text;
 using CursoInfoeste;
 using CursoInfoeste.Abstractions.Repositories;
 using CursoInfoeste.Abstractions.Services;
@@ -5,7 +6,9 @@ using CursoInfoeste.Banco;
 using CursoInfoeste.Banco.Repositories;
 using CursoInfoeste.Services;
 using CursoInfoeste.Swagger;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +31,20 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["JWT:ValidAudience"],
+        ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+        IssuerSigningKey = 
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Security:Jwt:Secret"]!))
+    };
+});
 
 builder.Services.AddSwaggerGen(c =>
 {
