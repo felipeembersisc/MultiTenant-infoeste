@@ -19,6 +19,7 @@ builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<ICashRegisterRepository, CashRegisterRepository>();
 builder.Services.AddScoped<ICashRegisterService, CashRegisterService>();
 builder.Services.AddScoped<Persistencia>();
+builder.Services.AddScoped<TokenService>();
 
 builder.Services.AddDbContext<CursoInfoesteContext>(options =>
     options.UseMySql(
@@ -65,6 +66,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllers();
 

@@ -13,8 +13,12 @@ public class TenantMiddleware
 
     public async Task InvokeAsync(HttpContext context, Persistencia persistencia)
     {
-        var tenantId = context.Request.Headers["TenantId"].ToString();
-        if (!string.IsNullOrEmpty(tenantId)) persistencia.TenantId = int.Parse(tenantId);
+        var tenantClaim = context.User?.Claims?.FirstOrDefault(x => x.Type == "TenantId");
+
+        if (tenantClaim != null && !string.IsNullOrEmpty(tenantClaim.Value))
+        {
+            persistencia.TenantId = int.Parse(tenantClaim.Value);
+        }
         
         Console.WriteLine("Antes de próximo middleware");
         
